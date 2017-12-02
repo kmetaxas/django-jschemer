@@ -1,6 +1,6 @@
 import json
 
-from .jsonschema import validate, ValidationError as JSONSchemaValidationError
+from jsonschema import validate, ValidationError as JSONSchemaValidationError
 
 from django import forms
 from django.core.exceptions import ValidationError
