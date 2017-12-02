@@ -39,8 +39,8 @@ class DjangoFormToJSONSchema(object):
         #TODO detect bound field
         widget = field.widget
         target_def = {
-            'title': field.label or pretty_name(name),
-            'description': field.help_text,
+            'title': str(field.label) or pretty_name(name),
+            'description': str(field.help_text),
         }
         # if field.required:                  #removed since it is not correct
         #     target_def['required'] = [name] #TODO this likely is not correct
