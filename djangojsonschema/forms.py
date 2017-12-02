@@ -4,7 +4,7 @@ from jsonschema import validate, ValidationError as JSONSchemaValidationError
 
 from django import forms
 from django.core.exceptions import ValidationError
-
+from .jsonutil import LazyEncoder
 
 class SchemaValidator(object):
     def __init__(self, schema):
@@ -42,8 +42,9 @@ class JSONSchemaField(forms.CharField):
         return attrs
     
     def get_data_attributes(self):
+
         return {
-            'data-schemajson': json.dumps(self.schema)
+            'data-schemajson': json.dumps(self.schema,cls=LazyEncoder)
         }
     
     #TODO make the js handling pluggable
