@@ -51,4 +51,4 @@ class JSONSchemaFieldTestCase(unittest.TestCase):
         }
         form = self.targetform(data=post)
         self.assertFalse(form.is_valid())
-        print(form.errors)
+        print form.errors

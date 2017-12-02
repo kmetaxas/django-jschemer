@@ -40,14 +40,14 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
 
     def test_convert_form(self):
         form_repr = self.encoder.convert_form(TestForm)
-        print(form_repr)
+        print form_repr
         try:
             check_schema(form_repr)
         except Exception as error:
-            print(error.message)
-            print(error.path)
-            print(error.validator)
-            print(error.cause)
+            print error.message
+            print error.path
+            print error.validator
+            print error.cause
             raise
         instance_form_repr = self.encoder.convert_form(TestForm())
         check_schema(instance_form_repr)
@@ -57,7 +57,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'string',
-            'description': 'Any string',
+            'description': u'Any string',
             'title': 'A charfield',
         }
         field = TestForm.base_fields[name]
@@ -71,7 +71,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'string',
-            'description': 'Any paragraph',
+            'description': u'Any paragraph',
             'title': 'A textarea',
         }
         field = TestForm.base_fields[name]
@@ -85,7 +85,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
             'required': [name],
             'type': 'string',
             'format': 'url',
-            'description': '',
+            'description': u'',
             'title': 'Url',
         }
         field = TestForm.base_fields[name]
@@ -98,7 +98,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'boolean',
-            'description': '',
+            'description': u'',
             'title': 'A boolean',
         }
         field = TestForm.base_fields[name]
@@ -111,7 +111,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'string',
-            'description': '',
+            'description': u'',
             'title': 'Select option',
             'enum': ['first', 'second'],
         }
@@ -126,7 +126,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
             'required': [name],
             'type': 'string',
             'format': 'date',
-            'description': '',
+            'description': u'',
             'title': 'A date',
         }
         field = TestForm.base_fields[name]
@@ -140,7 +140,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
             'required': [name],
             'type': 'string',
             'format': 'datetime',
-            'description': '',
+            'description': u'',
             'title': 'A datetime',
         }
         field = TestForm.base_fields[name]
@@ -153,7 +153,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'number',
-            'description': '',
+            'description': u'',
             'title': 'A decimal',
         }
         field = TestForm.base_fields[name]
@@ -167,7 +167,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
             'required': [name],
             'type': 'string',
             'format': 'email',
-            'description': '',
+            'description': u'',
             'title': 'An email',
         }
         field = TestForm.base_fields[name]
@@ -181,7 +181,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
             'required': [name],
             'type': 'string',
             'format': 'uri',
-            'description': '',
+            'description': u'',
             'title': 'A file',
         }
         field = TestForm.base_fields[name]
@@ -194,7 +194,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'number',
-            'description': '',
+            'description': u'',
             'title': 'A float',
         }
         field = TestForm.base_fields[name]
@@ -207,7 +207,7 @@ class FormToJsonSchemaTestCase(unittest.TestCase):
         ideal_repr = {
             'required': [name],
             'type': 'integer',
-            'description': '',
+            'description': u'',
             'title': 'An integer',
         }
         field = TestForm.base_fields[name]

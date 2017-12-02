@@ -5,7 +5,7 @@ import inspect
 def pretty_name(name):
     """Converts 'first_name' to 'First name'"""
     if not name:
-        return u''
+        return ''
     return name.replace('_', ' ').capitalize()
 
 class DjangoFormToJSONSchema(object):
@@ -25,7 +25,7 @@ class DjangoFormToJSONSchema(object):
         if not inspect.isclass(form) and hasattr(form, 'fields'):
             fields = form.fields
 
-        for name, field in fields.iteritems():
+        for name, field in list(fields.items()):
             json_schema['properties'][name] = self.convert_formfield(name, field, json_schema)
             if field.required:
                 json_schema['required'].append(name)
@@ -97,7 +97,7 @@ class DocKitSchemaToJSONSchema(DjangoFormToJSONSchema):
                 'type':'object',
                 'properties':{}, #TODO SortedDict
             }
-        for key, field in dockit_schema._meta.fields.iteritems():
+        for key, field in dockit_schema._meta.fields.tems():
             json_schema['properties'][key] = self.convert_dockitfield(key, field, json_schema)
         return json_schema
 
