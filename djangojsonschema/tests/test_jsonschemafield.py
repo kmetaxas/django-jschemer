@@ -1,6 +1,6 @@
 import json
 
-from django.utils import unittest
+import unittest
 from django import forms
 
 from djangojsonschema.jsonschema import DjangoFormToJSONSchema

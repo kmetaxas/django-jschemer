@@ -3,10 +3,12 @@ from django.forms import widgets, fields
 import inspect
 
 def pretty_name(name):
-    """Converts 'first_name' to 'First name'"""
+    """
+    Converts 'first_name' to 'First name'
+    """
     if not name:
         return ''
-    return name.replace('_', ' ').capitalize()
+        return name.replace('_', ' ').capitalize()
 
 class DjangoFormToJSONSchema(object):
     def convert_form(self, form, json_schema=None):
@@ -107,5 +109,5 @@ class DocKitSchemaToJSONSchema(DjangoFormToJSONSchema):
             formfield = field.formfield()
             return self.convert_formfield(formfield, json_schema)
         #else: #complex stuff
-        target_def = {}
+        #target_def = {}
 
