@@ -113,7 +113,7 @@ class RegexField(CharField):
 
     def update_part(self, part):
         part = super().update_part(part)
-        part['regex'] = self.field.regex
+        part['regex'] = self.field.regex.pattern
 
 
 class URLField(CharField):
@@ -162,7 +162,7 @@ class IntegerField(BaseDjangoJSONSchemaField):
 
         # making sure it is an Integer is  a hack found here:
         # https://spacetelescope.github.io/understanding-json-schema/reference/numeric.html
-        part['multipleOf':1]
+        part['multipleOf'] = 1
         return part
 
 
