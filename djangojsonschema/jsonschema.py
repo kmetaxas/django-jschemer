@@ -88,26 +88,3 @@ class DjangoModelToJSONSchema(DjangoFormToJSONSchema):
         model_form = None #TODO convert to model form
         #TODO handle many2many and inlines
         return self.convert_form(model_form, json_schema)
-
-#TODO move to django-dockit
-class DocKitSchemaToJSONSchema(DjangoFormToJSONSchema):
-    def convert_dockitschema(self, dockit_schema, json_schema=None):
-        if json_schema is None:
-            json_schema = {
-                #'title':dockit_schema._meta
-                #'description'
-                'type':'object',
-                'properties':{}, #TODO SortedDict
-            }
-        for key, field in dockit_schema._meta.fields.tems():
-            json_schema['properties'][key] = self.convert_dockitfield(key, field, json_schema)
-        return json_schema
-
-    def convert_dockitfield(self, name, field, json_schema):
-        #if simple field, get the form field
-        if True: #TODO is simple
-            formfield = field.formfield()
-            return self.convert_formfield(formfield, json_schema)
-        #else: #complex stuff
-        #target_def = {}
-
