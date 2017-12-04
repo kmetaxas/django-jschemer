@@ -66,7 +66,7 @@ class BaseDjangoJSONSchemaField(object):
         Returns the schema definition for this field
         """
         part = {
-            'title': str(self.get_label() ),
+            'title': str(self.get_label()),
             'description': str(self.help_text),
             'type': self.get_type(),
         }
