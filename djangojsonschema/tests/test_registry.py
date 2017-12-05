@@ -14,6 +14,9 @@ class NotReallyDjangoField(object):
     """ Does not subclass django.forms.fields.Field """
     pass
 
+class UnsupportedField(fields.Field):
+    pass
+
 
 class RegistryTestCase(unittest.TestCase):
 
@@ -67,3 +70,8 @@ class RegistryTestCase(unittest.TestCase):
             # not registered
             registry.unregister(TestSchemaField1)
             pass
+
+    def test_getschemafield(self):
+        field = UnsupportedField()
+        with self.assertRaisesRegexp(KeyError,"Unsupported field:*"):
+            registry.get_schemafield(field)

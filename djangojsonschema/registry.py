@@ -53,8 +53,22 @@ class JSONSchemaFieldRegistry(object):
         Searches registry for the given Django Form field and returns the
         associated Schema Field if found.
         Returns None otherwise
-        """
-        return self._registry.get(form_field, None)
 
+        It will search by class object which is the natural key but if passed,
+        an instance object it will iterate over the registry keys trying to
+        match them.
+        """
+        if inspect.isclass(form_field):
+            return self._registry.get(form_field, None)
+        if isinstance(form_field, DjangoField):
+            instance_name = form_field.__class__.__name__
+            for key,value in self._registry.items():
+                # This feels like a hack. I don't think there is a better way.
+                # isinstance() will not work because all key are subclasses of
+                # Field.
+                key_name = key.__name__
+                if key_name == instance_name:
+                    return value
+        raise KeyError("Unsupported field: {}".format(instance_name))
 
 registry = JSONSchemaFieldRegistry()
