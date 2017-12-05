@@ -6,7 +6,6 @@
 # idea to make an inner class (like class JSONSchema) and specifiy options
 # there.
 
-
 class BaseDjangoJSONSchemaField(object):
     def __init__(self, field, name):
         """
