@@ -5,6 +5,9 @@
 # If we need to specify options specific to the fields here, it might be a good
 # idea to make an inner class (like class JSONSchema) and specifiy options
 # there.
+from .decorators import register
+from django.forms import fields
+
 
 class BaseDjangoJSONSchemaField(object):
     def __init__(self, field, name):
@@ -84,17 +87,20 @@ class BaseDjangoJSONSchemaField(object):
         pass
 
 
+@register(fields.BooleanField)
 class BooleanField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "boolean"
 
 
+@register(fields.NullBooleanField)
 class NullBooleanField(BooleanField):
     # XXX How is Null value handled? needs testing
     pass
 
 
+@register(fields.CharField)
 class CharField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
@@ -108,6 +114,7 @@ class CharField(BaseDjangoJSONSchemaField):
         return part
 
 
+@register(fields.RegexField)
 class RegexField(CharField):
 
     def update_part(self, part):
@@ -115,6 +122,7 @@ class RegexField(CharField):
         part['regex'] = self.field.regex.pattern
 
 
+@register(fields.URLField)
 class URLField(CharField):
 
     def get_format(self):
@@ -122,12 +130,14 @@ class URLField(CharField):
         return "uri"
 
 
+@register(fields.UUIDField)
 class UUIDField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "string"
 
 
+@register(fields.DateField)
 class DateField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
@@ -137,18 +147,21 @@ class DateField(BaseDjangoJSONSchemaField):
         return "date"
 
 
+@register(fields.DateTimeField)
 class DateTimeField(DateField):
 
     def get_format(self):
         return "datetime"
 
 
+@register(fields.TimeField)
 class TimeField(DateField):
 
     def get_format(self):
         return "time"
 
 
+@register(fields.IntegerField)
 class IntegerField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "integer"
@@ -165,11 +178,13 @@ class IntegerField(BaseDjangoJSONSchemaField):
         return part
 
 
+@register(fields.DecimalField)
 class DecimalField(IntegerField):
     def get_type(self):
         return "number"
 
 
+@register(fields.EmailField)
 class EmailField(CharField):
     def get_type(self):
         return "string"
@@ -178,12 +193,14 @@ class EmailField(CharField):
         return "email"
 
 
+@register(fields.FileField)
 class FileField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"
     # TODO this obviously would not work as is.
 
 
+@register(fields.GenericIPAddressField)
 class GenericIPAddressField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"

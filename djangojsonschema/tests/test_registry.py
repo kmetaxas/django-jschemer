@@ -22,7 +22,8 @@ class RegistryTestCase(unittest.TestCase):
 
         # This should raise ValueError because it is an included field and
         # should have been added using a decorator
-        registry.register(fields.CharField , jsonfields.CharField)
+        with self.assertRaisesRegexp(ValueError,"^Already registered$"):
+            registry.register(fields.CharField , jsonfields.CharField)
 
         self.assertEquals(jsonfields.CharField,
                           registry.get_schemafield(fields.CharField)
@@ -37,7 +38,7 @@ class RegistryTestCase(unittest.TestCase):
             # django field does not inherit from django.forms.field.Field
             registry.register(NotReallyDjangoField, TestSchemaField1 )
 
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegexp(ValueError,"^Already registered$"):
             # already registered
             registry.register(fields.CharField, jsonfields.CharField)
             pass
