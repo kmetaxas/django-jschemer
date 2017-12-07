@@ -14,7 +14,7 @@ Requirements
 ------------
 
 * Python 3 or later (not tested with 2.x)
-* Django 1.4 or later
+* Django 1.8 or later, althought it should probably work in earlier versions
 
 
 =====
