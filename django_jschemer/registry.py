@@ -72,3 +72,6 @@ class JSONSchemaFieldRegistry(object):
         raise KeyError("Unsupported field: {}".format(instance_name))
 
 field_registry = JSONSchemaFieldRegistry()
+
+# Import fields to trigger loading of default fields into registry
+from django_jschemer import fields
