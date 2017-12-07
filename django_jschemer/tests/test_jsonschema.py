@@ -20,6 +20,7 @@ class DjangoFormToJSONSchemaTestCase(unittest.TestCase):
             'an_ipaddress':'127.0.0.1',
             'a_boolean':True,
             'a_regex':r"\d+",
+            'a_choicefield':'a',
         }
 
     def test_convert_form(self):

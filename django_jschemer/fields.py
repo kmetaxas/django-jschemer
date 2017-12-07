@@ -93,7 +93,20 @@ class BaseDjangoJSONSchemaField(object):
         options -- if provided then the options dictionary is updated with it.
         """
         # Add some standard field option like 'editable' etc
-        return self._alpaca_options.update(options)
+        self.update_alpaca_options()
+        if options and isinstance(options,dict):
+            self._alpaca_options.update(options)
+        return self._alpaca_options
+
+    def update_alpaca_options(self,options=None):
+        """
+        Override this in your fields to add custom field options
+        It should modify the self._alpaca_options variable and return None
+
+        options -- if this given, it is up to the user to decide how to handle
+        per field.
+        """
+        return None
 
 
 @register(fields.BooleanField)
@@ -228,3 +241,8 @@ class ChoiceField(BaseDjangoJSONSchemaField):
     def update_part(self,part):
         part['enum'] = [choice[0] for choice in self.widget.choices ]
         return part
+
+    def update_alpaca_options(self,options=None):
+        # TODO find out the widget (radio/select)
+        self._alpaca_options["optionLabels"] = [choice[1] for choice in
+                                                self.widget.choices]

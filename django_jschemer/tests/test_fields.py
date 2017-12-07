@@ -7,6 +7,13 @@ from django.utils.translation import ugettext_lazy as _
 from .. import fields as jsonfields
 
 class TestForm(Form):
+
+    CHOICES = (
+        ("a","OPTION A"),
+        ("b","OPTION B"),
+        ("c","OPTION C"),
+    )
+
     a_charfield = fields.CharField(max_length=20, min_length=4,
                                    initial="INITIAL_VALUE",
                                    help_text="HelpText")
@@ -26,6 +33,9 @@ class TestForm(Form):
     a_regex = fields.RegexField(label=_("A Regex"),
                                 regex = r"\d+"
                                 )
+    a_choicefield = fields.ChoiceField(
+        label="A Choice field",
+        choices=CHOICES)
 
 
 class FormFieldsTestCase(unittest.TestCase):
@@ -195,3 +205,17 @@ class FormFieldsTestCase(unittest.TestCase):
         # Apparently RegexField compiles regular expressions.
         # We should compare against uncompiled version (raw string)
         # self.assertEquals(part['regex'],r"\d+") 
+
+    def test_choicefield(self):
+        name = "a_choicefield"
+        unbound_field = TestForm.base_fields[name]
+        jsonfield = jsonfields.ChoiceField(unbound_field,name)
+        print("jsonfield={}".format(jsonfield))
+        part = jsonfield.get_schema_part()
+        alpaca_options = jsonfield.get_alpaca_options({"custom1":"custom option"})
+        print("alpaca_options={}".format(alpaca_options))
+        # enum should be the zeroth index of the tuple
+        enum = [choice[0] for choice in unbound_field.choices]
+        choice_labels = [choice[1] for choice in unbound_field.choices]
+        self.assertEquals(part['enum'],enum)
+        self.assertEquals(alpaca_options['optionLabels'],choice_labels)
