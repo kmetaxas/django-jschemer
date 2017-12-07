@@ -8,6 +8,7 @@ from .. import fields as jsonfields
 
 class TestForm(Form):
     a_charfield = fields.CharField(max_length=20, min_length=4,
+                                   initial="INITIAL_VALUE",
                                    help_text="HelpText")
     a_charfield_lazy = fields.CharField(max_length=20, min_length=4,
                                         label = _("Test Label"),
@@ -53,9 +54,12 @@ class FormFieldsTestCase(unittest.TestCase):
         self.assertEquals(part['description'],"HelpText")
         self.assertEquals(part['type'],"string")
         self.assertEquals(part['title'],"A charfield")
+        # test if initial value generates default
+        self.assertEquals(part['default'],"INITIAL_VALUE")
         # There should be no 'formar' for CharField
         with self.assertRaises(KeyError):
             part['format']
+
 
         # Test a lazy charfield with label
         name = 'a_charfield_lazy'

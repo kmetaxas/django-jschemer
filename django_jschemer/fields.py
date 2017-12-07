@@ -27,6 +27,7 @@ class BaseDjangoJSONSchemaField(object):
         self.localize = field.localize
         # Added in Django 1.9 so we default to False if not found
         self.disabled = getattr(field,'disabled',False)
+        self._alpaca_options = {}
 
     def get_type(self):
         """
@@ -73,19 +74,26 @@ class BaseDjangoJSONSchemaField(object):
             'description': str(self.help_text),
             'type': self.get_type(),
         }
+        # if we have initial value, add it to 'default' keyword
+        if self.field.initial:
+            part['default'] = self.field.initial
+
         # if 'format' is specified, add it.
         t_format = self.get_format()
         if t_format:
             part['format'] = t_format
         return self.update_part(part) or part
 
-    def get_alpaca_options(self):
+    def get_alpaca_options(self,options=None):
         """
         Get an options object to be used with AlpacaJS.
+        Get any options that we can gather from the field that cannot be used in
+        JSON Schema but **can** be used as an extra Alpaca options object.
+
+        options -- if provided then the options dictionary is updated with it.
         """
-        # TODO this should be decoupled. Possibly using a different module
-        # that subclasses the same fields using a Mix-In
-        pass
+        # Add some standard field option like 'editable' etc
+        return self._alpaca_options.update(options)
 
 
 @register(fields.BooleanField)
