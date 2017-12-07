@@ -1,5 +1,5 @@
 from django.forms.fields import Field as DjangoField
-from .fields import BaseDjangoJSONSchemaField
+#from django_jschemer.fields import BaseDjangoJSONSchemaField
 import inspect
 
 
@@ -29,8 +29,8 @@ class JSONSchemaFieldRegistry(object):
             raise ValueError("jsonschema_field_cls is not a Class object")
         if not issubclass(form_field_cls, DjangoField):
             raise ValueError("You must supply a subclass of djanfo.forms.fields.Field")
-        if not issubclass(jsonschema_field_cls, BaseDjangoJSONSchemaField):
-            raise ValueError("You must supply a subclass of BaseDjangoJSONSchemaField")
+#        if not issubclass(jsonschema_field_cls, BaseDjangoJSONSchemaField):
+#            raise ValueError("You must supply a subclass of BaseDjangoJSONSchemaField")
 
         if form_field_cls in self._registry:
             raise ValueError("Already registered")
@@ -71,4 +71,4 @@ class JSONSchemaFieldRegistry(object):
                     return value
         raise KeyError("Unsupported field: {}".format(instance_name))
 
-registry = JSONSchemaFieldRegistry()
+field_registry = JSONSchemaFieldRegistry()

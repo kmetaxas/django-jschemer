@@ -1,5 +1,5 @@
 import inspect
-from .registry import registry
+from django_jschemer.registry import field_registry
 
 class DjangoFormToJSONSchema(object):
 
@@ -38,7 +38,7 @@ class DjangoFormToJSONSchema(object):
         # We do not check for excptions here. 
         # should we let them propagate or should we have a sensible default?
         print("Field={}/name={}".format(field,name))
-        schemafield_cls = registry.get_schemafield(field)
+        schemafield_cls = field_registry.get_schemafield(field)
         schemafield = schemafield_cls(field,name)
 
         part = schemafield.get_schema_part()

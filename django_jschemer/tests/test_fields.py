@@ -4,7 +4,7 @@ from django.forms import Form
 from django.forms import fields
 from django.utils.translation import ugettext_lazy as _
 
-from .. import fields as jsonfields
+from django_jschemer import fields as jsonfields
 
 class TestForm(Form):
 

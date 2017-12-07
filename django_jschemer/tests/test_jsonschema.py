@@ -1,6 +1,6 @@
 import unittest
 from .test_fields import TestForm
-from ..jsonschema import DjangoFormToJSONSchema
+from django_jschemer.jsonschema import DjangoFormToJSONSchema
 import jsonschema
 from jsonschema.exceptions import ValidationError as SchemaValidationError
 

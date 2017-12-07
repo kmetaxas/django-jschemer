@@ -4,7 +4,7 @@ from jsonschema import validate, ValidationError as JSONSchemaValidationError
 
 from django import forms
 from django.core.exceptions import ValidationError
-from .jsonutil import LazyEncoder
+from django_jschemer.jsonutil import LazyEncoder
 
 class SchemaValidator(object):
     def __init__(self, schema):

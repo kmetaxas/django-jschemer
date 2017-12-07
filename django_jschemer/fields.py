@@ -5,8 +5,8 @@
 # If we need to specify options specific to the fields here, it might be a good
 # idea to make an inner class (like class JSONSchema) and specifiy options
 # there.
-from .decorators import register
 from django.forms import fields
+from django_jschemer.decorators import register
 
 
 class BaseDjangoJSONSchemaField(object):

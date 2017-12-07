@@ -1,8 +1,8 @@
 import unittest
 from django.forms import fields
-from .. import fields as jsonfields
+from django_jschemer import fields as jsonfields
 
-from ..registry import registry
+from django_jschemer.registry import field_registry as registry
 
 
 class TestSchemaField1(jsonfields.BaseDjangoJSONSchemaField ):
