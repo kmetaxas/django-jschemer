@@ -25,7 +25,8 @@ class BaseDjangoJSONSchemaField(object):
         self.error_messages = field.error_messages
         self.validators = field.validators
         self.localize = field.localize
-        self.disabled = field.disabled
+        # Added in Django 1.9 so we default to False if not found
+        self.disabled = getattr(field,'disabled',False)
 
     def get_type(self):
         """
