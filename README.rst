@@ -37,6 +37,7 @@ You need to subclass django_schemer.fields.BaseDjangoJSONSchemaField and provide
 overriding `def_type()` is required but everything else is optional. `get_type` should return a string with the JSON Schema 'type' field.
 
 Example::
+
     class CustomSchemaField(BaseDjangoJSONSchemaField):
         
         def get_type():
@@ -46,10 +47,12 @@ Example::
 There are now 2 ways to add this to the registry.
 
 Method 1::
+
     from django_jschemer.registry import registry
     registry.register(YourCustomField,CustomSchemaField)
 
 Method 2 (decorator)::
+
     from django_jschemer.decorators import register as schema_register
 
     @schema_register(CustomSchemaField)
