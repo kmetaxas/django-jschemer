@@ -3,8 +3,8 @@ import json
 import unittest
 from django import forms
 
-from djangojsonschema.jsonschema import DjangoFormToJSONSchema
-from djangojsonschema.forms import JSONSchemaField
+from django_jschemer.jsonschema import DjangoFormToJSONSchema
+from django_jschemer.forms import JSONSchemaField
 
 
 class SurveyForm(forms.Form):
@@ -28,7 +28,7 @@ class JSONSchemaFieldTestCase(unittest.TestCase):
         field = self.targetform()['survey_entry']
         html = field.as_widget()
         self.assertTrue('data-schemajson' in html)
-    
+   
     def test_field_validation(self):
         survey_response = {
             'name': 'John Smith',

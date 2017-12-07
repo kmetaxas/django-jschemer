@@ -12,9 +12,9 @@ try:
 except IOError: #happens when using tox
     LONG_DESC = ''
 
-setup(name='django-jsonschema',
+setup(name='django-jschemer',
       version=VERSION,
-      description="django-jsonschema converts Django Forms into JSON Schema compatibile representations",
+      description="django-jschemer converts Django Forms into JSON Schema compatibile representations",
       long_description=LONG_DESC,
       classifiers=[
           'Programming Language :: Python',
@@ -28,11 +28,11 @@ setup(name='django-jsonschema',
           'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
       ],
       keywords='django json schema',
-      author = 'Jason Kraus',
-      author_email = 'zbyte64@gmail.com',
-      maintainer = 'Jason Kraus',
-      maintainer_email = 'zbyte64@gmail.com',
-      url='http://github.com/zbyte64/django-jsonschema',
+      author = 'Konstantinos Metaxas',
+      author_email = 'arcanum@kill9.eu',
+      maintainer = 'Konstantinos Metaxas',
+      maintainer_email = 'arcanum@kill9.eu',
+      url='https://github.com/kmetaxas/django-jschemer',
       license='New BSD License',
       packages=find_packages(exclude=['tests']),
       test_suite='tests.runtests.runtests',

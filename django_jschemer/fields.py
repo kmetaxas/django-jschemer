@@ -1,4 +1,4 @@
-# Supported fields by django-jsonschema.
+# Supported fields by django-jschemer
 # Each class supports a single field and is responsible for generating the
 # approriate JSON schema.
 
@@ -209,12 +209,13 @@ class GenericIPAddressField(BaseDjangoJSONSchemaField):
         # XXX should we support IPV6? and how?
         return "ipv4"
 
+
 @register(fields.ChoiceField)
 class ChoiceField(BaseDjangoJSONSchemaField):
     # XXX this is a stub. We need to add enum, check the widget etc etc
     def get_type(self):
         return "string"
-    
+
     def update_part(self,part):
         part['enum'] = [choice[0] for choice in self.widget.choices ]
         return part
