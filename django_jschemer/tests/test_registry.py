@@ -3,6 +3,7 @@ from django.forms import fields
 from django_jschemer import fields as jsonfields
 
 from django_jschemer.registry import field_registry as registry
+from django_jschemer.decorators import register
 
 
 class TestSchemaField1(jsonfields.BaseDjangoJSONSchemaField ):
@@ -75,3 +76,18 @@ class RegistryTestCase(unittest.TestCase):
         field = UnsupportedField()
         with self.assertRaisesRegexp(KeyError,"Unsupported field:*"):
             registry.get_schemafield(field)
+
+    def test_register_decorator(self):
+        from django_jschemer.fields import BaseDjangoJSONSchemaField
+        @register(UnsupportedField)
+        class MyField(BaseDjangoJSONSchemaField):
+            def get_type(self):
+                return "string"
+
+        self.assertEquals(registry.get_schemafield(UnsupportedField),
+                          MyField)
+        # now unregister unsupported field (it might affect tests that expect
+        # it to not be registered
+        registry.unregister(UnsupportedField)
+
+

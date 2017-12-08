@@ -1,4 +1,4 @@
-from django.forms.fields import Field as DjangoField
+from django.forms import fields
 #from django_jschemer.fields import BaseDjangoJSONSchemaField
 import inspect
 
@@ -27,7 +27,7 @@ class JSONSchemaFieldRegistry(object):
             raise ValueError("form_field_cls is not a Class object")
         if not inspect.isclass(jsonschema_field_cls):
             raise ValueError("jsonschema_field_cls is not a Class object")
-        if not issubclass(form_field_cls, DjangoField):
+        if not issubclass(form_field_cls, fields.Field):
             raise ValueError("You must supply a subclass of djanfo.forms.fields.Field")
 #        if not issubclass(jsonschema_field_cls, BaseDjangoJSONSchemaField):
 #            raise ValueError("You must supply a subclass of BaseDjangoJSONSchemaField")
@@ -42,7 +42,7 @@ class JSONSchemaFieldRegistry(object):
         Unregister the given Django Field class
         """
 
-        if not issubclass(form_field_cls, DjangoField):
+        if not issubclass(form_field_cls, fields.Field):
             raise ValueError("You must supply a subclass of djanfo.forms.fields.Field")
         if form_field_cls not in self._registry:
             raise ValueError("class {} is Not registered".format(form_field_cls))
@@ -60,7 +60,7 @@ class JSONSchemaFieldRegistry(object):
         """
         if inspect.isclass(form_field):
             return self._registry.get(form_field, None)
-        if isinstance(form_field, DjangoField):
+        if isinstance(form_field, fields.Field):
             instance_name = form_field.__class__.__name__
             for key,value in self._registry.items():
                 # This feels like a hack. I don't think there is a better way.
@@ -74,4 +74,4 @@ class JSONSchemaFieldRegistry(object):
 field_registry = JSONSchemaFieldRegistry()
 
 # Import fields to trigger loading of default fields into registry
-from django_jschemer import fields
+from django_jschemer import fields as schemafields

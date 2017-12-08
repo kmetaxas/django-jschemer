@@ -6,7 +6,8 @@
 # idea to make an inner class (like class JSONSchema) and specifiy options
 # there.
 from django.forms import fields
-from django_jschemer.decorators import register
+#from django_jschemer.decorators import register
+from django_jschemer.registry import field_registry
 
 
 class BaseDjangoJSONSchemaField(object):
@@ -109,20 +110,19 @@ class BaseDjangoJSONSchemaField(object):
         return None
 
 
-@register(fields.BooleanField)
 class BooleanField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "boolean"
+field_registry.register(fields.BooleanField,BooleanField)
 
 
-@register(fields.NullBooleanField)
 class NullBooleanField(BooleanField):
     # XXX How is Null value handled? needs testing
     pass
+field_registry.register(fields.NullBooleanField,NullBooleanField)
 
 
-@register(fields.CharField)
 class CharField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
@@ -134,32 +134,32 @@ class CharField(BaseDjangoJSONSchemaField):
         if self.field.min_length:
             part['minLength'] = self.field.min_length
         return part
+field_registry.register(fields.CharField,CharField)
 
 
-@register(fields.RegexField)
 class RegexField(CharField):
 
     def update_part(self, part):
         part = super().update_part(part)
         part['regex'] = self.field.regex.pattern
+field_registry.register(fields.RegexField,RegexField)
 
 
-@register(fields.URLField)
 class URLField(CharField):
 
     def get_format(self):
         # is URL supported. For now URI
         return "uri"
+field_registry.register(fields.URLField,URLField)
 
 
-@register(fields.UUIDField)
 class UUIDField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "string"
+field_registry.register(fields.UUIDField,UUIDField)
 
 
-@register(fields.DateField)
 class DateField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
@@ -167,23 +167,23 @@ class DateField(BaseDjangoJSONSchemaField):
 
     def get_format(self):
         return "date"
+field_registry.register(fields.DateField,DateField)
 
 
-@register(fields.DateTimeField)
 class DateTimeField(DateField):
 
     def get_format(self):
         return "datetime"
+field_registry.register(fields.DateTimeField,DateTimeField)
 
 
-@register(fields.TimeField)
 class TimeField(DateField):
 
     def get_format(self):
         return "time"
+field_registry.register(fields.TimeField,TimeField)
 
 
-@register(fields.IntegerField)
 class IntegerField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "integer"
@@ -198,31 +198,29 @@ class IntegerField(BaseDjangoJSONSchemaField):
         # https://spacetelescope.github.io/understanding-json-schema/reference/numeric.html
         part['multipleOf'] = 1
         return part
+field_registry.register(fields.IntegerField,IntegerField)
 
 
-@register(fields.DecimalField)
 class DecimalField(IntegerField):
     def get_type(self):
         return "number"
+field_registry.register(fields.DecimalField,DecimalField)
 
-
-@register(fields.EmailField)
 class EmailField(CharField):
     def get_type(self):
         return "string"
 
     def get_format(self):
         return "email"
+field_registry.register(fields.EmailField,EmailField)
 
-
-@register(fields.FileField)
 class FileField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"
     # TODO this obviously would not work as is.
+field_registry.register(fields.FileField,FileField)
 
 
-@register(fields.GenericIPAddressField)
 class GenericIPAddressField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"
@@ -230,9 +228,9 @@ class GenericIPAddressField(BaseDjangoJSONSchemaField):
     def get_format(self):
         # XXX should we support IPV6? and how?
         return "ipv4"
+field_registry.register(fields.GenericIPAddressField,GenericIPAddressField)
 
 
-@register(fields.ChoiceField)
 class ChoiceField(BaseDjangoJSONSchemaField):
     # XXX this is a stub. We need to add enum, check the widget etc etc
     def get_type(self):
@@ -246,3 +244,4 @@ class ChoiceField(BaseDjangoJSONSchemaField):
         # TODO find out the widget (radio/select)
         self._alpaca_options["optionLabels"] = [choice[1] for choice in
                                                 self.widget.choices]
+field_registry.register(fields.ChoiceField,ChoiceField)
