@@ -8,7 +8,7 @@ class DjangoFormToJSONSchemaTestCase(unittest.TestCase):
 
     def setUp(self):
         self.form = TestForm()
-        self.converter = DjangoFormToJSONSchema()
+        self.converter = DjangoFormToJSONSchema(self.form)
         self.validating_data = {
             'a_charfield':"Test text",
             'a_charfield_lazy':"text",
@@ -23,8 +23,8 @@ class DjangoFormToJSONSchemaTestCase(unittest.TestCase):
             'a_choicefield':'a',
         }
 
-    def test_convert_form(self):
-        schema = self.converter.convert_form(self.form)
+    def test_convert_to_schema(self):
+        schema = self.converter.convert_to_schema()
         print("converted schema={}".format(schema))
         # We have no assertion because if successfull it does *NOT* raise an
         # exception.
