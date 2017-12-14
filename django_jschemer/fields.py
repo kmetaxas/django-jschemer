@@ -27,7 +27,7 @@ class BaseDjangoJSONSchemaField(object):
         self.validators = field.validators
         self.localize = field.localize
         # Added in Django 1.9 so we default to False if not found
-        self.disabled = getattr(field,'disabled',False)
+        self.disabled = getattr(field, 'disabled', False)
         self._alpaca_options = {}
 
     def get_type(self):
@@ -85,7 +85,7 @@ class BaseDjangoJSONSchemaField(object):
             part['format'] = t_format
         return self.update_part(part) or part
 
-    def get_alpaca_options(self,options=None):
+    def get_alpaca_options(self, options=None):
         """
         Get an options object to be used with AlpacaJS.
         Get any options that we can gather from the field that cannot be used in
@@ -95,11 +95,11 @@ class BaseDjangoJSONSchemaField(object):
         """
         # Add some standard field option like 'editable' etc
         self.update_alpaca_options()
-        if options and isinstance(options,dict):
+        if options and isinstance(options, dict):
             self._alpaca_options.update(options)
         return self._alpaca_options
 
-    def update_alpaca_options(self,options=None):
+    def update_alpaca_options(self, options=None):
         """
         Override this in your fields to add custom field options
         It should modify the self._alpaca_options variable and return None
@@ -114,13 +114,13 @@ class BooleanField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "boolean"
-field_registry.register(fields.BooleanField,BooleanField)
+field_registry.register(fields.BooleanField, BooleanField)
 
 
 class NullBooleanField(BooleanField):
     # XXX How is Null value handled? needs testing
     pass
-field_registry.register(fields.NullBooleanField,NullBooleanField)
+field_registry.register(fields.NullBooleanField, NullBooleanField)
 
 
 class CharField(BaseDjangoJSONSchemaField):
@@ -134,7 +134,7 @@ class CharField(BaseDjangoJSONSchemaField):
         if self.field.min_length:
             part['minLength'] = self.field.min_length
         return part
-field_registry.register(fields.CharField,CharField)
+field_registry.register(fields.CharField, CharField)
 
 
 class RegexField(CharField):
@@ -142,7 +142,7 @@ class RegexField(CharField):
     def update_part(self, part):
         part = super().update_part(part)
         part['regex'] = self.field.regex.pattern
-field_registry.register(fields.RegexField,RegexField)
+field_registry.register(fields.RegexField, RegexField)
 
 
 class URLField(CharField):
@@ -150,14 +150,14 @@ class URLField(CharField):
     def get_format(self):
         # is URL supported. For now URI
         return "uri"
-field_registry.register(fields.URLField,URLField)
+field_registry.register(fields.URLField, URLField)
 
 
 class UUIDField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "string"
-field_registry.register(fields.UUIDField,UUIDField)
+field_registry.register(fields.UUIDField, UUIDField)
 
 
 class DateField(BaseDjangoJSONSchemaField):
@@ -167,21 +167,21 @@ class DateField(BaseDjangoJSONSchemaField):
 
     def get_format(self):
         return "date"
-field_registry.register(fields.DateField,DateField)
+field_registry.register(fields.DateField, DateField)
 
 
 class DateTimeField(DateField):
 
     def get_format(self):
         return "datetime"
-field_registry.register(fields.DateTimeField,DateTimeField)
+field_registry.register(fields.DateTimeField, DateTimeField)
 
 
 class TimeField(DateField):
 
     def get_format(self):
         return "time"
-field_registry.register(fields.TimeField,TimeField)
+field_registry.register(fields.TimeField, TimeField)
 
 
 class IntegerField(BaseDjangoJSONSchemaField):
@@ -198,13 +198,13 @@ class IntegerField(BaseDjangoJSONSchemaField):
         # https://spacetelescope.github.io/understanding-json-schema/reference/numeric.html
         part['multipleOf'] = 1
         return part
-field_registry.register(fields.IntegerField,IntegerField)
+field_registry.register(fields.IntegerField, IntegerField)
 
 
 class DecimalField(IntegerField):
     def get_type(self):
         return "number"
-field_registry.register(fields.DecimalField,DecimalField)
+field_registry.register(fields.DecimalField, DecimalField)
 
 class EmailField(CharField):
     def get_type(self):
@@ -212,13 +212,13 @@ class EmailField(CharField):
 
     def get_format(self):
         return "email"
-field_registry.register(fields.EmailField,EmailField)
+field_registry.register(fields.EmailField, EmailField)
 
 class FileField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"
     # TODO this obviously would not work as is.
-field_registry.register(fields.FileField,FileField)
+field_registry.register(fields.FileField, FileField)
 
 
 class GenericIPAddressField(BaseDjangoJSONSchemaField):
@@ -228,7 +228,7 @@ class GenericIPAddressField(BaseDjangoJSONSchemaField):
     def get_format(self):
         # XXX should we support IPV6? and how?
         return "ipv4"
-field_registry.register(fields.GenericIPAddressField,GenericIPAddressField)
+field_registry.register(fields.GenericIPAddressField, GenericIPAddressField)
 
 
 class ChoiceField(BaseDjangoJSONSchemaField):
@@ -236,12 +236,12 @@ class ChoiceField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"
 
-    def update_part(self,part):
-        part['enum'] = [choice[0] for choice in self.widget.choices ]
+    def update_part(self, part):
+        part['enum'] = [choice[0] for choice in self.widget.choices]
         return part
 
-    def update_alpaca_options(self,options=None):
+    def update_alpaca_options(self, options=None):
         # TODO find out the widget (radio/select)
         self._alpaca_options["optionLabels"] = [choice[1] for choice in
                                                 self.widget.choices]
-field_registry.register(fields.ChoiceField,ChoiceField)
+field_registry.register(fields.ChoiceField, ChoiceField)
