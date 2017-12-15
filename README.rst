@@ -26,7 +26,7 @@ To convert a form to a JSON Schema::
 
     from django_jschemer.jsonschema import DjangoFormToJSONSchema
     
-    schema_repr = DjangoFormToJSONSchema().convert_form(MyForm)
+    schema_repr , alpaca_options = DjangoFormToJSONSchema().convert_form(MyForm)
 
 
 If you have written your own custom Fields (django.forms.field.Field subclasses) then it is easy to add them
@@ -40,8 +40,12 @@ Example::
 
     class CustomSchemaField(BaseDjangoJSONSchemaField):
         
-        def get_type():
+        def get_type(self):
             return "string"
+
+        # optionally define a get_format() method
+        def get_format(self):
+            return "email"
 
 
 There are now 2 ways to add this to the registry.
