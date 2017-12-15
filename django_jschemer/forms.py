@@ -1,6 +1,6 @@
 import json
 
-from jsonschema import validate, ValidationError as JSONSchemaValidationError
+from jsonschema import validate, FormatChecker,  ValidationError as JSONSchemaValidationError
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -16,7 +16,9 @@ class SchemaValidator(object):
         except ValueError as error:
             raise ValidationError(str(error))
         try:
-            validate(decoded_value, self.schema)
+            validate(decoded_value,
+                     self.schema,
+                     format_checker=FormatChecker())
         except JSONSchemaValidationError as error:
             raise ValidationError('%s: %s' %('.'.join(error.path), error.message))
         return value
