@@ -9,7 +9,7 @@ from django_jschemer.jsonutil import LazyEncoder
 class SchemaValidator(object):
     def __init__(self, schema):
         self.schema = schema
-    
+
     def __call__(self, value):
         try:
             decoded_value = json.loads(value)
@@ -26,27 +26,29 @@ class JSONSchemaField(forms.CharField):
     A django form field that takes in a schema definition and serializes the result in JSON.
     Renders to a textarea with a data-schemajson attribute containing the initial json .
     Javascript is loaded to convert the field into an Alpacajs powered form: http://www.alpacajs.org/
-    
+
     Upon return validate the submission using python-jsonschema
     '''
     widget = forms.Textarea
-    
-    def __init__(self, schema, **kwargs):
+
+    def __init__(self, schema,options=None, **kwargs):
         self.schema = schema
+        self.options = options
         super(JSONSchemaField, self).__init__(**kwargs)
         self.validators.append(SchemaValidator(schema=schema))
-    
+
     def widget_attrs(self, widget):
         attrs = super(JSONSchemaField, self).widget_attrs(widget)
         attrs.update(self.get_data_attributes())
         return attrs
-    
+
     def get_data_attributes(self):
 
-        return {
-            'data-schemajson': json.dumps(self.schema,cls=LazyEncoder)
-        }
-    
+        data_attr = { 'data-schemajson': json.dumps(self.schema,cls=LazyEncoder) }
+        if self.options:
+            data_attr.update( {'data-alpacaoptions': json.dumps(self.options)})
+        return data_attr
+
     #TODO make the js handling pluggable
     class Media:
         js = ('http://www.alpacajs.org/js/alpaca.min.js',)

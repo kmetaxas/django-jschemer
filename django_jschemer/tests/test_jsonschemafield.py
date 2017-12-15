@@ -14,8 +14,8 @@ class SurveyForm(forms.Form):
 
 class JSONSchemaFieldTestCase(unittest.TestCase):
     def setUp(self):
-        self.encoder = DjangoFormToJSONSchema(SurveyForm)
-        self.schema = self.encoder.convert_to_schema()
+        self.encoder = DjangoFormToJSONSchema()
+        self.schema,self.options = self.encoder.convert_to_schema(SurveyForm)
 
         class TargetForm(forms.Form):
             ticket = forms.CharField()

@@ -196,7 +196,8 @@ class IntegerField(BaseDjangoJSONSchemaField):
 
         # making sure it is an Integer is  a hack found here:
         # https://spacetelescope.github.io/understanding-json-schema/reference/numeric.html
-        part['multipleOf'] = 1
+        # TODO commented out because it breaks in Alpaca. Until i figure it out
+        # part['multipleOf'] = 1
         return part
 field_registry.register(fields.IntegerField, IntegerField)
 
@@ -242,6 +243,7 @@ class ChoiceField(BaseDjangoJSONSchemaField):
 
     def update_alpaca_options(self, options=None):
         # TODO find out the widget (radio/select)
+        self._alpaca_options["type"] = "select"
         self._alpaca_options["optionLabels"] = [choice[1] for choice in
                                                 self.widget.choices]
 field_registry.register(fields.ChoiceField, ChoiceField)
