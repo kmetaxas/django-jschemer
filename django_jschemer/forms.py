@@ -23,6 +23,17 @@ class SchemaValidator(object):
             raise ValidationError('%s: %s' %('.'.join(error.path), error.message))
         return value
 
+class JSONSchemaFormWidget(forms.widgets.Textarea):
+    """
+    Custom widget that is hidden by default
+    and has javascript to get the Alpaca form data on submit
+    """
+    print("JSONSchemaFormWidget init")
+    class Media:
+        # TODO load alpaca js/css here or leave it to the user?
+        js = ('jschemer_widget.js',)
+
+
 class JSONSchemaField(forms.CharField):
     '''
     A django form field that takes in a schema definition and serializes the result in JSON.
@@ -31,7 +42,7 @@ class JSONSchemaField(forms.CharField):
 
     Upon return validate the submission using python-jsonschema
     '''
-    widget = forms.Textarea
+    widget = JSONSchemaFormWidget
 
     def __init__(self, schema,options=None, **kwargs):
         self.schema = schema
@@ -51,12 +62,6 @@ class JSONSchemaField(forms.CharField):
             data_attr.update( {'data-alpacaoptions': json.dumps(self.options)})
         return data_attr
 
-    #TODO make the js handling pluggable
-    class Media:
-        js = ('http://www.alpacajs.org/js/alpaca.min.js',)
-        css = {
-            'all': ('http://www.alpacajs.org/css/alpaca.min.css',)
-        }
 
 #CONSIDER: a JSONSchemaForm that has a schema attribute and constructs the appropriate base_fields with JSONSchemaFields for the complex subfields.
 #class MyForm(JSONSchemaForm): schema=schema; afield=forms.CharField()
