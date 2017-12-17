@@ -22,6 +22,14 @@ Usage
 =====
 
 
+Add app to Django installed apps.::
+
+    INSTALLED_APPS =  [
+            # Other apps
+            'django_jschemer',
+            ]
+
+
 To convert a form to a JSON Schema::
 
     from django_jschemer.jsonschema import DjangoFormToJSONSchema
