@@ -6,6 +6,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django_jschemer.jsonutil import LazyEncoder
 
+
 class SchemaValidator(object):
     def __init__(self, schema):
         self.schema = schema
@@ -20,8 +21,9 @@ class SchemaValidator(object):
                      self.schema,
                      format_checker=FormatChecker())
         except JSONSchemaValidationError as error:
-            raise ValidationError('%s: %s' %('.'.join(error.path), error.message))
+            raise ValidationError('%s: %s' % ('.'.join(error.path), error.message))
         return value
+
 
 class JSONSchemaFormWidget(forms.widgets.Textarea):
     """
@@ -29,9 +31,10 @@ class JSONSchemaFormWidget(forms.widgets.Textarea):
     and has javascript to get the Alpaca form data on submit
     """
     print("JSONSchemaFormWidget init")
+
     class Media:
         # TODO load alpaca js/css here or leave it to the user?
-        js = ('jschemer_widget.js',)
+        js = ('django_jschemer/jschemer_widget.js',)
 
 
 class JSONSchemaField(forms.CharField):
@@ -44,7 +47,7 @@ class JSONSchemaField(forms.CharField):
     '''
     widget = JSONSchemaFormWidget
 
-    def __init__(self, schema,options=None, **kwargs):
+    def __init__(self, schema, options=None, **kwargs):
         self.schema = schema
         self.options = options
         super(JSONSchemaField, self).__init__(**kwargs)
@@ -57,12 +60,12 @@ class JSONSchemaField(forms.CharField):
 
     def get_data_attributes(self):
 
-        data_attr = { 'data-schemajson': json.dumps(self.schema,cls=LazyEncoder) }
+        data_attr = {'data-schemajson': json.dumps(self.schema, cls=LazyEncoder)}
         if self.options:
-            data_attr.update( {'data-alpacaoptions': json.dumps(self.options)})
+            data_attr.update({'data-alpacaoptions': json.dumps(self.options)})
         return data_attr
 
 
-#CONSIDER: a JSONSchemaForm that has a schema attribute and constructs the appropriate base_fields with JSONSchemaFields for the complex subfields.
+# CONSIDER: a JSONSchemaForm that has a schema attribute and constructs the appropriate base_fields with JSONSchemaFields for the complex subfields.
 #class MyForm(JSONSchemaForm): schema=schema; afield=forms.CharField()
 #model forms infer that we should save these values and should be custom, likely utilizing a single JSONSchemaField
