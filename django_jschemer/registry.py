@@ -1,5 +1,4 @@
 from django.forms import fields
-#from django_jschemer.fields import BaseDjangoJSONSchemaField
 import inspect
 
 
@@ -62,7 +61,7 @@ class JSONSchemaFieldRegistry(object):
             return self._registry.get(form_field, None)
         if isinstance(form_field, fields.Field):
             instance_name = form_field.__class__.__name__
-            for key,value in self._registry.items():
+            for key, value in self._registry.items():
                 # This feels like a hack. I don't think there is a better way.
                 # isinstance() will not work because all key are subclasses of
                 # Field.
@@ -70,6 +69,7 @@ class JSONSchemaFieldRegistry(object):
                 if key_name == instance_name:
                     return value
         raise KeyError("Unsupported field: {}".format(instance_name))
+
 
 field_registry = JSONSchemaFieldRegistry()
 
