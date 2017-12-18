@@ -30,7 +30,6 @@ class JSONSchemaFormWidget(forms.widgets.Textarea):
     Custom widget that is hidden by default
     and has javascript to get the Alpaca form data on submit
     """
-    print("JSONSchemaFormWidget init")
 
     class Media:
         # TODO load alpaca js/css here or leave it to the user?

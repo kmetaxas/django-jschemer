@@ -66,7 +66,6 @@ class DjangoFormToJSONSchema(object):
 
         # We do not check for exceptions here.
         # should we let them propagate or should we have a sensible default?
-        print("Field={}/name={}".format(field, name))
         schemafield_cls = field_registry.get_schemafield(field)
         schemafield = schemafield_cls(field, name)
 
