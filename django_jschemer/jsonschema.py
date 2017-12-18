@@ -1,4 +1,5 @@
 import inspect
+from collections import OrderedDict
 from django_jschemer.registry import field_registry
 
 
@@ -21,7 +22,7 @@ class DjangoFormToJSONSchema(object):
                 # 'title':dockit_schema._meta
                 # 'description'
                 'type': 'object',
-                'properties': {},  # TODO SortedDict
+                'properties': OrderedDict(),
             }
 
     def convert_to_schema(self,form):
