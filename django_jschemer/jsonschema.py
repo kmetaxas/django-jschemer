@@ -36,7 +36,7 @@ class DjangoFormToJSONSchema(object):
                 'properties': OrderedDict(),
             }
         if form_key:
-            self.json_schema['id'] = form_key
+            self.json_schema['id'] = str(form_key)
 
     def convert_to_schema(self, form):
         """
