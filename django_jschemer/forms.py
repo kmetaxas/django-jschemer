@@ -25,7 +25,7 @@ class SchemaValidator(object):
         return value
 
 
-class JSONSchemaFormWidget(forms.widgets.Textarea):
+class JSONSchemaFormWidget(forms.widgets.HiddenInput):
     """
     Custom widget that is hidden by default
     and has javascript to get the Alpaca form data on submit
@@ -57,6 +57,7 @@ class JSONSchemaField(forms.CharField):
         attrs = super(JSONSchemaField, self).widget_attrs(widget)
         attrs.update(self.get_data_attributes())
         attrs['data-fieldkey'] = self.fieldkey
+        attrs['data-alpaca'] = "true" # Should AlpacaJS use this?
         return attrs
 
     def get_data_attributes(self):
