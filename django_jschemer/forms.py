@@ -48,6 +48,7 @@ class JSONSchemaField(forms.CharField):
 
     def __init__(self, schema, options=None, **kwargs):
         self.schema = schema
+        self.fieldkey = schema.get('id',None)
         self.options = options
         super(JSONSchemaField, self).__init__(**kwargs)
         self.validators.append(SchemaValidator(schema=schema))
@@ -55,6 +56,7 @@ class JSONSchemaField(forms.CharField):
     def widget_attrs(self, widget):
         attrs = super(JSONSchemaField, self).widget_attrs(widget)
         attrs.update(self.get_data_attributes())
+        attrs['data-fieldkey'] = self.fieldkey
         return attrs
 
     def get_data_attributes(self):

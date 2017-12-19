@@ -5,10 +5,21 @@ from django_jschemer.registry import field_registry
 
 class DjangoFormToJSONSchema(object):
     """
-    Converts a Form to a JSON schema
+    Converts a Form to a JSON schema.
+
+    schema_template -- optionally specify a template for JSON SCHEMA
+    form_key -- optionally specify a unique identifier for the schema.
+
+    The reasoning for form_key is to allow multiple JSONSchemaFields in the
+    same form:
+        1. Enable Django view code to identify a JSONSchemaField and possibly
+        associate it with a model or a specific Form class.
+        2. Use it to namespace or otherwise separate a set of fields that
+        belong to the same 'form' (using JS etc).
+    Currently it is used in Schema's 'id' attribute.
     """
 
-    def __init__(self, schema_template=None):
+    def __init__(self, schema_template=None, form_key=None):
         self.alpaca_options = {
             "fields": {},
             "helper": "",
@@ -24,6 +35,8 @@ class DjangoFormToJSONSchema(object):
                 'type': 'object',
                 'properties': OrderedDict(),
             }
+        if form_key:
+            self.json_schema['id'] = form_key
 
     def convert_to_schema(self, form):
         """
