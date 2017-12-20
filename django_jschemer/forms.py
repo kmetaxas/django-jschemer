@@ -64,7 +64,8 @@ class JSONSchemaField(forms.CharField):
 
         data_attr = {'data-schemajson': json.dumps(self.schema, cls=LazyEncoder)}
         if self.options:
-            data_attr.update({'data-alpacaoptions': json.dumps(self.options)})
+            data_attr.update({'data-alpacaoptions': json.dumps(self.options,
+                                                               cls=LazyEncoder)})
         return data_attr
 
 
