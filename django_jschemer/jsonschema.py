@@ -62,15 +62,15 @@ class DjangoFormToJSONSchema(object):
 
         # Check the form for inner 'AlpacaOptions' class and update
         # dictionaries with any supplied options/schema.
-        meta_options = getattr(form,"SchemerOptions",None)
+        meta_options = getattr(form, "SchemerOptions", None)
         if meta_options:
             # We need merger because nested dicts don't update() automatically
             # and need to recurse. deepmerge module handles that for us.
-            merger = Merger([ (dict,["merge"])], ["override"],["override"])
+            merger = Merger([(dict, ["merge"])], ["override"], ["override"])
             self.alpaca_options = merger.merge(self.alpaca_options,
-                                               getattr(meta_options,"options",{}))
-            self.json_schema= merger.merge(self.json_schema,
-                                           getattr(meta_options,"schema",{}))
+                                               getattr(meta_options, "options", {}))
+            self.json_schema = merger.merge(self.json_schema,
+                                            getattr(meta_options, "schema", {}))
         return self.json_schema, self.alpaca_options
 
     input_type_map = {

@@ -5,7 +5,7 @@
 # If we need to specify options specific to the fields here, it might be a good
 # idea to make an inner class (like class JSONSchema) and specifiy options
 # there.
-from django.forms import fields
+from django import forms
 #from django_jschemer.decorators import register
 from django_jschemer.registry import field_registry
 
@@ -114,13 +114,13 @@ class BooleanField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "boolean"
-field_registry.register(fields.BooleanField, BooleanField)
+field_registry.register(forms.BooleanField, BooleanField)
 
 
 class NullBooleanField(BooleanField):
     # XXX How is Null value handled? needs testing
     pass
-field_registry.register(fields.NullBooleanField, NullBooleanField)
+field_registry.register(forms.NullBooleanField, NullBooleanField)
 
 
 class CharField(BaseDjangoJSONSchemaField):
@@ -134,7 +134,7 @@ class CharField(BaseDjangoJSONSchemaField):
         if self.field.min_length:
             part['minLength'] = self.field.min_length
         return part
-field_registry.register(fields.CharField, CharField)
+field_registry.register(forms.CharField, CharField)
 
 
 class RegexField(CharField):
@@ -142,7 +142,7 @@ class RegexField(CharField):
     def update_part(self, part):
         part = super().update_part(part)
         part['regex'] = self.field.regex.pattern
-field_registry.register(fields.RegexField, RegexField)
+field_registry.register(forms.RegexField, RegexField)
 
 
 class URLField(CharField):
@@ -150,14 +150,14 @@ class URLField(CharField):
     def get_format(self):
         # is URL supported. For now URI
         return "uri"
-field_registry.register(fields.URLField, URLField)
+field_registry.register(forms.URLField, URLField)
 
 
 class UUIDField(BaseDjangoJSONSchemaField):
 
     def get_type(self):
         return "string"
-field_registry.register(fields.UUIDField, UUIDField)
+field_registry.register(forms.UUIDField, UUIDField)
 
 
 class DateField(BaseDjangoJSONSchemaField):
@@ -167,21 +167,21 @@ class DateField(BaseDjangoJSONSchemaField):
 
     def get_format(self):
         return "date"
-field_registry.register(fields.DateField, DateField)
+field_registry.register(forms.DateField, DateField)
 
 
 class DateTimeField(DateField):
 
     def get_format(self):
         return "datetime"
-field_registry.register(fields.DateTimeField, DateTimeField)
+field_registry.register(forms.DateTimeField, DateTimeField)
 
 
 class TimeField(DateField):
 
     def get_format(self):
         return "time"
-field_registry.register(fields.TimeField, TimeField)
+field_registry.register(forms.TimeField, TimeField)
 
 
 class IntegerField(BaseDjangoJSONSchemaField):
@@ -199,13 +199,13 @@ class IntegerField(BaseDjangoJSONSchemaField):
         # TODO commented out because it breaks in Alpaca. Until i figure it out
         # part['multipleOf'] = 1
         return part
-field_registry.register(fields.IntegerField, IntegerField)
+field_registry.register(forms.IntegerField, IntegerField)
 
 
 class DecimalField(IntegerField):
     def get_type(self):
         return "number"
-field_registry.register(fields.DecimalField, DecimalField)
+field_registry.register(forms.DecimalField, DecimalField)
 
 class EmailField(CharField):
     def get_type(self):
@@ -213,13 +213,13 @@ class EmailField(CharField):
 
     def get_format(self):
         return "email"
-field_registry.register(fields.EmailField, EmailField)
+field_registry.register(forms.EmailField, EmailField)
 
 class FileField(BaseDjangoJSONSchemaField):
     def get_type(self):
         return "string"
     # TODO this obviously would not work as is.
-field_registry.register(fields.FileField, FileField)
+field_registry.register(forms.FileField, FileField)
 
 
 class GenericIPAddressField(BaseDjangoJSONSchemaField):
@@ -229,7 +229,7 @@ class GenericIPAddressField(BaseDjangoJSONSchemaField):
     def get_format(self):
         # XXX should we support IPV6? and how?
         return "ipv4"
-field_registry.register(fields.GenericIPAddressField, GenericIPAddressField)
+field_registry.register(forms.GenericIPAddressField, GenericIPAddressField)
 
 
 class ChoiceField(BaseDjangoJSONSchemaField):
@@ -246,4 +246,11 @@ class ChoiceField(BaseDjangoJSONSchemaField):
         self._alpaca_options["type"] = "select"
         self._alpaca_options["optionLabels"] = [choice[1] for choice in
                                                 self.widget.choices]
-field_registry.register(fields.ChoiceField, ChoiceField)
+field_registry.register(forms.ChoiceField, ChoiceField)
+
+
+class ModelChoiceField(ChoiceField):
+    def get_type(self):
+        return "number"  # modelchoice by default returns ( Primary Key ,  __str__ ) tuples
+
+field_registry.register(forms.ModelChoiceField, ModelChoiceField)
