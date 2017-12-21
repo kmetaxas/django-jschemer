@@ -60,6 +60,11 @@ class DjangoFormToJSONSchemaTestCase(unittest.TestCase):
         self.assertEquals(
             options['fields']['a_url']['allowIntranet'],
             True)
+        # Assert that options supplied by jschemer that we do *NOT* override
+        # are kept
+        self.assertEquals(
+            options['fields']['a_choicefield']['optionLabels'],
+            ["OPTION A","OPTION B","OPTION C"])
         # Test with a form that has *NO* inner class
         schema, options = self.converter.convert_to_schema(TestFormWithNoOptions)
         with self.assertRaises(KeyError):

@@ -36,6 +36,10 @@ setup(name='django-jschemer',
       license='New BSD License',
       packages=find_packages(exclude=['tests']),
       test_suite='tests.runtests.runtests',
+      install_requires=[
+          'jsonschema',
+          'deepmerge',
+      ],
       tests_require=(
         'pep8',
         'coverage',

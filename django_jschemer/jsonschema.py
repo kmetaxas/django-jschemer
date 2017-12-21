@@ -1,6 +1,7 @@
 import inspect
 from collections import OrderedDict
 from django_jschemer.registry import field_registry
+from deepmerge import Merger
 
 
 class DjangoFormToJSONSchema(object):
@@ -63,9 +64,13 @@ class DjangoFormToJSONSchema(object):
         # dictionaries with any supplied options/schema.
         meta_options = getattr(form,"SchemerOptions",None)
         if meta_options:
-            self.alpaca_options.update( getattr(meta_options,"options",{}))
-            self.json_schema.update( getattr(meta_options,"schema",{}))
-
+            # We need merger because nested dicts don't update() automatically
+            # and need to recurse. deepmerge module handles that for us.
+            merger = Merger([ (dict,["merge"])], ["override"],["override"])
+            self.alpaca_options = merger.merge(self.alpaca_options,
+                                               getattr(meta_options,"options",{}))
+            self.json_schema= merger.merge(self.json_schema,
+                                           getattr(meta_options,"schema",{}))
         return self.json_schema, self.alpaca_options
 
     input_type_map = {
