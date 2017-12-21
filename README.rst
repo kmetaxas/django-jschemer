@@ -85,3 +85,34 @@ To embed a JSON Schema as a form field::
     form = MyForm(data={'subfield':'<json encoded value>'})
     form.validate() #will validate the subfield entry against schema
     form['subfield'].as_widget() #will render a textarea widget with a data-schemajson attribute
+
+
+You also have the choice of adding options to schema and or alpaca options with an inner class inside your Form::
+
+    from django import forms
+
+    class MyForm(forms.Form):
+        COLORS = (
+        ('red','Awesome Red'),
+        ('blue','Sky Blue'),
+        )
+        paper = forms.CharField(max_length=30)
+        paper_color = forms.ChoiceField(choices=COLORS)
+
+        class SchemerOptions:
+            # options is a dictionary that is used to update() alpaca options.
+            # It will override any option calculated to django-jschemer
+            options = {
+                'fields':{
+                    'paper':{'placeholder':'Placeholder text'},
+                }
+            }
+
+            # schema is a dictionary that is used to update() JSON Schema
+            # It will override any option calculated to django-jschemer
+            schema = {
+                'dependencies':{
+                    'paper_color':['paper'],
+                }
+            }
+

@@ -37,6 +37,23 @@ class TestForm(Form):
         label="A Choice field",
         choices=CHOICES)
 
+    class SchemerOptions:
+        options = {
+            "fields":{
+                'a_charfield':{'placeholder':'PLACETEST'},
+                'a_url':{'allowIntranet':True},
+            },
+        }
+
+        schema = {
+            'dependencies':{
+                'a_url':['a_charfield']},
+        }
+
+        # TODO add Layout here?
+
+class TestFormWithNoOptions(Form):
+    a_url = fields.URLField(min_length=15)
 
 class FormFieldsTestCase(unittest.TestCase):
 

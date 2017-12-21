@@ -25,7 +25,6 @@ class DjangoFormToJSONSchema(object):
             "helper": "",
         }
 
-        self._cached = False
         if schema_template:
             self.json_schema = schema_template
         else:
@@ -41,7 +40,6 @@ class DjangoFormToJSONSchema(object):
     def convert_to_schema(self, form):
         """
         Converts the Form to a JSON Schema object and Alpaca options
-        and caches the results to instance variables.
         """
 
         fields = form.base_fields
@@ -52,8 +50,6 @@ class DjangoFormToJSONSchema(object):
 
         required_fields = []
         for name, field in list(fields.items()):
-            # TODO we should check the form for inner class of extra options
-            # and pass them as extra_options param
             part, options = self.convert_formfield(field, name)
             self.json_schema['properties'][name] = part
             self.alpaca_options['fields'][name] = options
@@ -63,7 +59,13 @@ class DjangoFormToJSONSchema(object):
         if required_fields:
             self.json_schema['required'] = required_fields
 
-        self._cached = True
+        # Check the form for inner 'AlpacaOptions' class and update
+        # dictionaries with any supplied options/schema.
+        meta_options = getattr(form,"SchemerOptions",None)
+        if meta_options:
+            self.alpaca_options.update( getattr(meta_options,"options",{}))
+            self.json_schema.update( getattr(meta_options,"schema",{}))
+
         return self.json_schema, self.alpaca_options
 
     input_type_map = {
