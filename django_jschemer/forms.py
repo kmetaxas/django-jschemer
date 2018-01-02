@@ -49,7 +49,7 @@ class JSONSchemaField(forms.CharField):
     def __init__(self, schema, options=None, **kwargs):
         self.schema = schema
         self.fieldkey = schema.get('id',None)
-        self.options = options
+        self.options = options or {}
         super(JSONSchemaField, self).__init__(**kwargs)
         self.validators.append(SchemaValidator(schema=schema))
 

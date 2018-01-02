@@ -116,3 +116,11 @@ You also have the choice of adding options to schema and or alpaca options with 
                 }
             }
 
+
+============
+Static files
+============
+
+django-jschemer comes with some default Javascript to initialize AlpacaJS. It does *NOT* include alpacajs or handlebars or jQuery which is left up to you to do.
+
+The default JS file requires jQuery. IT is fairly trivial to replace it with your own as per the Django static files override rules.
